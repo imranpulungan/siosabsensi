@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/barcode"
+            android:title="@string/scan_barcode" />
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
+
+        <item
+            android:id="@+id/nav_rekap_absen"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+            android:title="@string/rekap_absen" />
+        <item
+            android:id="@+id/nav_rekap_pegawai"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+            android:title="@string/rekap_pegawai" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_menu_logout"
+            android:title="@string/logout" />
+    </group>
+
+</menu>
