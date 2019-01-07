@@ -22,10 +22,12 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teknologi.sios.absensi.R;
+import com.teknologi.sios.absensi.adapter.RekapAbsensiAdapter;
 import com.teknologi.sios.absensi.entity.User;
 import com.teknologi.sios.absensi.fragment.BarcodeScannerFargment;
 import com.teknologi.sios.absensi.fragment.HomeFragment;
 import com.teknologi.sios.absensi.fragment.RekapAbsenFragment;
+import com.teknologi.sios.absensi.fragment.RekapPegawaiFragment;
 import com.teknologi.sios.absensi.utils.Session;
 
 import butterknife.BindView;
@@ -33,6 +35,8 @@ import butterknife.ButterKnife;
 
 public class GoalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
+
+    private String url = "https://sios-sil.silbusiness.com/SIOS_FILE_API/";
 
     private Fragment fragmentContent;
     private int selectedMenu;
@@ -71,7 +75,7 @@ public class GoalActivity extends AppCompatActivity
         tvCompanyName.setText(dataUser.getName());
 
         Picasso.with(this)
-                .load("https://silbusiness.com/sios_management/SIOS_FILE/" + dataUser.getFoto())
+                .load(url + dataUser.getFoto())
                 .placeholder(R.drawable.icon)
                 .into(imgCompany);
 
@@ -90,7 +94,7 @@ public class GoalActivity extends AppCompatActivity
 
 
         Picasso.with(this)
-                .load("https://silbusiness.com/sios_management/SIOS_FILE/" + dataUser.getFoto())
+                .load(url + dataUser.getFoto())
                 .resize(150,200)
                 .placeholder(R.drawable.icon)
                 .into(imgSideMenu);
@@ -215,11 +219,23 @@ public class GoalActivity extends AppCompatActivity
                 fragmentContent = new HomeFragment();
             }else if (id == R.id.nav_camera) {
                 setTitle(R.string.scanbarcode);
+                tvCompanyName.setVisibility(View.VISIBLE);
+                imgCompany.setVisibility(View.VISIBLE);
+                tvScanText.setVisibility(View.VISIBLE);
+                cardLogo.setVisibility(View.VISIBLE);
                 fragmentContent = BarcodeScannerFargment.newInstance();
             }else if(id == R.id.nav_rekap_absen){
                 setTitle(R.string.rekap_absen);
                 fragmentContent = RekapAbsenFragment.newInstance();
+            }else if(id == R.id.nav_rekap_pegawai){
+                setTitle(R.string.rekap_pegawai);
+                tvCompanyName.setVisibility(View.GONE);
+                imgCompany.setVisibility(View.GONE);
+                tvScanText.setVisibility(View.GONE);
+                cardLogo.setVisibility(View.GONE);
+                fragmentContent = RekapPegawaiFragment.newInstance();
             }
+
 
             FragmentManager frgManager = getSupportFragmentManager();
             Bundle bundle = new Bundle();

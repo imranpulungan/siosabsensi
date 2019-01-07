@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.teknologi.sios.absensi.R;
 import com.teknologi.sios.absensi.api.ApiClient;
+import com.teknologi.sios.absensi.api.response.AbsensiResponse;
 import com.teknologi.sios.absensi.api.response.ApiResponse;
 import com.teknologi.sios.absensi.api.response.AuthResponse;
 import com.teknologi.sios.absensi.api.response.CompanyResponse;
@@ -26,6 +27,7 @@ import retrofit2.Response;
 public class Presenter {
 
     public static final String RES_GET_DATA_USER = "res_get_data_user";
+    public static final String RES_GET_DATA= "res_get_data";
     public static final String RES_LOGIN = "res_process_login";
     public static final String RES_IS_LOGGED = "res_islogged";
     public static final String RES_CHECK_IP = "res_check_ip";
@@ -178,6 +180,46 @@ public class Presenter {
             }
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Presenter.this.onFailure(t);
+            }
+        });
+    }
+
+    public void getData(Map<String, String> data) {
+        ApiClient.getInstance(context).getApi().getData(data).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                try {
+                    if (response.isSuccessful())
+                        presenterresponse.doSuccess(response.body(), RES_GET_DATA);
+                    else handleError(response.errorBody(), response.code());
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Presenter.this.onFailure(t);
+            }
+        });
+    }
+
+    public void getDataAbsensi(Map<String, String> data) {
+        ApiClient.getInstance(context).getApi().getDataAbsensi(data).enqueue(new Callback<AbsensiResponse>() {
+            @Override
+            public void onResponse(Call<AbsensiResponse> call, Response<AbsensiResponse> response) {
+                try {
+                    if (response.isSuccessful())
+                        presenterresponse.doSuccess(response.body(), RES_GET_DATA);
+                    else handleError(response.errorBody(), response.code());
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<AbsensiResponse> call, Throwable t) {
                 Presenter.this.onFailure(t);
             }
         });

@@ -1,5 +1,6 @@
 package com.teknologi.sios.absensi.api;
 
+import com.teknologi.sios.absensi.api.response.AbsensiResponse;
 import com.teknologi.sios.absensi.api.response.ApiResponse;
 import com.teknologi.sios.absensi.api.response.AuthResponse;
 import com.teknologi.sios.absensi.api.response.InfoIPResponse;
@@ -18,25 +19,30 @@ import retrofit2.http.Query;
 
 
 public interface ApiInterface {
-    @GET("display_data.php")
-    Call<UserResponse> getDataUser(@Query("id") String id);
-
-    @POST("sios_management/config@niagait.com/api.php?f=proses_login")
-    Call<AuthResponse> postDataLogin(@Body Map<String,String> data);
-
-    @POST("sios_management/config@niagait.com/api.php?f=is_logged")
-    Call<AuthResponse> isLogged();
-
     @GET("https://ipinfo.io/geo/")
     Call<InfoIPResponse> checkIP();
 
-    @Multipart
-    @POST("sios_management/config@niagait.com/api.php?f=proses_absen")
-    Call<ApiResponse> absenProses(@PartMap Map<String, RequestBody> dataAdd);
+    @GET("display_data.php")
+    Call<UserResponse> getDataUser(@Query("id") String id);
 
+    @POST("config@niagait.com/api.php?f=proses_login")
+    Call<AuthResponse> postDataLogin(@Body Map<String,String> data);
 
-    @POST("sios_management/config@niagait.com/api.php?f=check_code")
+    @POST("config@niagait.com/api.php?f=is_logged")
+    Call<AuthResponse> isLogged();
+
+    @POST("config@niagait.com/api.php?f=check_code")
     Call<UserResponse> checkQr(@Body Map<String, String> data);
+
+    @POST("config@niagait.com/api.php?f=proses_data")
+    Call<UserResponse> getData(@Body Map<String, String> data);
+
+    @POST("config@niagait.com/api.php?f=proses_data")
+    Call<AbsensiResponse> getDataAbsensi(@Body Map<String, String> data);
+
+    @Multipart
+    @POST("config@niagait.com/api.php?f=proses_absen")
+    Call<ApiResponse> absenProses(@PartMap Map<String, RequestBody> dataAdd);
 }
 
 

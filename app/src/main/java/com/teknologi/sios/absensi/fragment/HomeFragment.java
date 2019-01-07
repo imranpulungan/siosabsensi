@@ -62,6 +62,8 @@ import static com.teknologi.sios.absensi.presenter.Presenter.RES_CHECK_IP;
 
 public class HomeFragment extends AppFragment implements iPresenterResponse {
 
+    private String url = "https://silbusiness.com/sios_management/SIOS_FILE/";
+
     private static final int OPEN_CAMERA = 101;
 
     @BindView(R.id.img_user)
@@ -309,7 +311,7 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
 
     private void attachData() {
         Picasso.with(getContext())
-                .load("https://silbusiness.com/sios_management/SIOS_FILE/" + dataUser.getFoto())
+                .load(url + dataUser.getFoto())
                 .placeholder(R.drawable.icon)
                 .into(imgUser);
 

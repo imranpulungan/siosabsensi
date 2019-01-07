@@ -143,6 +143,12 @@ public class BarcodeScannerFargment extends AppFragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        checkPermissions();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mScannerView.setResultHandler(this);

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -49,6 +50,15 @@ import static com.teknologi.sios.absensi.presenter.Presenter.RES_ABSEN_PROSES;
 
 public class AbsenActivity extends AppActivity implements iPresenterResponse {
 
+    private String url = "https://sios-sil.silbusiness.com/SIOS_FILE_API/";
+
+    private static final int MINGGU = 1;
+    private static final int SENIN  = 2;
+    private static final int SELASA = 3;
+    private static final int RABU   = 4;
+    private static final int KAMIS  = 5;
+    private static final int JUMAT  = 6;
+    private static final int SABTU  = 7;
     private static final int OPEN_CAMERA = 101;
 
     @BindView(R.id.img_user)
@@ -129,7 +139,7 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Absen");
+        setTitle("Absensi");
         dataUser = (User) getIntent().getSerializableExtra("dataUser");
         ButterKnife.bind(this);
         initObject();
@@ -230,7 +240,6 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
     }
 
     private void saveBitmap(Bitmap bitmap){
-        ContextWrapper wrapper = new ContextWrapper(this);
         String root = Environment.getExternalStorageDirectory().toString();
         File file = new File(root);
         file.mkdir();
@@ -245,16 +254,44 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
 
             if (null != imageItem) {
                 String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                String hari = "";
+                switch (calendar.get(Calendar.DAY_OF_WEEK)){
+                    case SENIN :
+                        hari = "senin";
+                        break;
+                    case SELASA :
+                        hari = "selasa";
+                        break;
+                    case RABU :
+                        hari = "rabu";
+                        break;
+                    case KAMIS :
+                        hari = "kamis";
+                        break;
+                    case JUMAT :
+                        hari = "jumat";
+                        break;
+                    case SABTU :
+                        hari = "sabtu";
+                        break;
+                    case MINGGU :
+                        hari = "miggu";
+                        break;
+                }
+
                 String generatedString = "SIOS_ABSENSI_" + dataUser.getAiu() +"_"+timestamp;
                 File _file = new File(imageItem.getPath());
                 Map<String, RequestBody> dataAdd = new HashMap<>();
                 dataAdd.put("id_pegawai", toRequestBody(dataUser.getAiu()));
                 dataAdd.put("id_penugasan", toRequestBody(dataUser.getId_penugasan()));
                 dataAdd.put("jenis_absen", toRequestBody(jenis_absen));
+                dataAdd.put("hari", toRequestBody(hari));
+
                 RequestBody _requestbody = RequestBody.create(MediaType.parse("image/png"), _file);
                 dataAdd.put("fileToUpload\"; filename=\""+generatedString+".jpg\"", _requestbody);
-                Log.d("Proccess", dataAdd.toString());
-
+                Log.d("Proccess", String.valueOf(calendar.get(Calendar.DAY_OF_WEEK)));
                 mPresenter.absenProses(dataAdd);
             }
         }catch (IOException e){
@@ -265,7 +302,7 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
     private void attachData() {
 
         Picasso.with(this)
-                .load("https://silbusiness.com/sios_management/SIOS_FILE/" + dataUser.getFoto())
+                .load(url + dataUser.getFoto())
                 .placeholder(R.drawable.icon)
                 .into(imgUser);
 
@@ -287,25 +324,27 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
     @Override
     public void doSuccess(ApiResponse response, String tag) {
         if(tag.equals(RES_ABSEN_PROSES)){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog dialog;
             if (response.status){
                 builder.setMessage(R.string.dialog_message_success)
                         .setTitle(R.string.dialog_title);
-                AlertDialog dialog = builder.create();
+                dialog = builder.create();
                 dialog.show();
             }else{
-                builder.setMessage(R.string.dialog_message_failed)
+                builder.setMessage(response.message)
                         .setTitle(R.string.dialog_title);
-                AlertDialog dialog = builder.create();
+                dialog = builder.create();
                 dialog.show();
             }
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    dialog.dismiss();
                     finish();
                 }
-            }, 1000);
+            }, 1500);
         }
     }
 

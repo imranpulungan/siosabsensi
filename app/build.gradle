@@ -19,7 +19,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField "String", "API_URL", "\"https://silbusiness.com/\""
+            buildConfigField "String", "API_URL", "\"https://sios-sil.silbusiness.com/\""
         }
     }
 }

@@ -34,7 +34,7 @@ public class ApiClient {
     }
 
     public static String getAssets(String path){
-        return getURI() + "storage/" + path;
+        return getURI() + "SIOS_FILE_API/" + path;
     }
 
     public Retrofit getClient(){
