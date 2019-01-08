@@ -15,17 +15,17 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_height="190dp"
                 android:layout_gravity="center"
                 android:elevation="@dimen/cardview_default_radius"
                 android:layout_margin="10dp">
 
                 <ImageView
                     android:id="@+id/img_user"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:elevation="4dp"
+                    android:padding="5dp"
                     android:src="@drawable/icon" />
             </android.support.v7.widget.CardView>
 
@@ -41,7 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
-                android:editable="false"/>
+                android:editable="false"
+                android:textSize="13dp"
+                android:textStyle="bold"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"/>
@@ -54,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/no_identitas"
-                android:editable="false"/>
+                android:editable="false"
+                android:textSize="13dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -77,7 +80,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/kota_lahir"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_weight="1"
@@ -93,7 +97,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/tgl_lahir"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -118,7 +123,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/agama"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,7 +141,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/gender"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
             </LinearLayout>
             <View
@@ -159,7 +166,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_weight="1"
@@ -175,8 +183,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/no_hp"
-                        android:editable="false"/>
-
+                        android:editable="false"
+                        android:textSize="13dp"/>
                 </LinearLayout>
             </LinearLayout>
             <View
@@ -264,7 +272,6 @@
             <!--<View-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="5dp"/>-->
-            <!---->
             <!--<TextView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
@@ -286,7 +293,6 @@
                 <!--android:layout_height="wrap_content"-->
                 <!--android:text="@string/desc_absen"-->
                 <!--android:textColor="@android:color/holo_red_dark"/>-->
-
             <Button
                 android:layout_marginTop="10dp"
                 android:id="@+id/btn_absen"

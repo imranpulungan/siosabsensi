@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SIOS ABSENSI</string>
+    <string name="app_name">SIOS ABSENSI SIL</string>
     <string name="barcode">Barcode</string>
     <string name="network_error">Error Connecting to Server</string>
     <string name="scanbarcode">SCAN QR-CODE</string>

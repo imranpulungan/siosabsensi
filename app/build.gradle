@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
-        applicationId "com.teknologi.sios.absensi"
+        applicationId "com.teknologi.labakaya.siosabsensiandroid"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -14,7 +14,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_URL", "\"http://192.168.1.5:89/\""
+            buildConfigField "String", "API_URL", "\"https://sios-sil.silbusiness.com/\""
         }
         debug {
             applicationIdSuffix ".debug"
