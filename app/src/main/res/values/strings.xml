@@ -49,4 +49,10 @@
     <string name="copyright2">SIOS ABSENSI \nHak Cipta PT.SRIKANDI INTI LESTARI © 2018-2019, \nDeveloped by NiagaIT.com</string>
     <string name="dialog_qr_not_valid">QR-Code tidak valid</string>
     <string name="dialog_qr">QR-Code</string>
+    <string name="edit_password_old">Old Password</string>
+    <string name="value_change">Change Password</string>
+    <string name="value_verify">Verify</string>
+    <string name="edit_password_new">New Password</string>
+    <string name="edit_password_new_confirm">Confirm New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>

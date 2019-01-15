@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teknologi.labakaya.siosabsensiandroid.R;
+import com.teknologi.labakaya.siosabsensiandroid.activity.AbsenActivity;
 import com.teknologi.labakaya.siosabsensiandroid.api.response.ApiResponse;
 import com.teknologi.labakaya.siosabsensiandroid.api.response.InfoIPResponse;
 import com.teknologi.labakaya.siosabsensiandroid.core.AppFragment;
@@ -39,6 +41,7 @@ import com.teknologi.labakaya.siosabsensiandroid.presenter.Presenter;
 import com.teknologi.labakaya.siosabsensiandroid.presenter.iPresenterResponse;
 import com.teknologi.labakaya.siosabsensiandroid.utils.DateUtils;
 import com.teknologi.labakaya.siosabsensiandroid.utils.ProgressDialogUtils;
+import com.teknologi.labakaya.siosabsensiandroid.utils.SoundService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -288,6 +291,7 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
             imageItem = Uri.parse(file.getAbsolutePath());
 
             if (null != imageItem) {
+                Date date = new Date();
                 String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
                 String generatedString = "SIOS_ABSENSI_" + dataUser.getAiu() +"_"+timestamp;
                 File _file = new File(imageItem.getPath());
@@ -295,9 +299,9 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
                 dataAdd.put("id_pegawai", toRequestBody(dataUser.getAiu()));
                 dataAdd.put("id_penugasan", toRequestBody(dataUser.getId_penugasan()));
                 dataAdd.put("jenis_absen", toRequestBody(jenis_absen));
+                dataAdd.put("hari", toRequestBody(DateUtils.getWeekDay(date)));
                 RequestBody _requestbody = RequestBody.create(MediaType.parse("image/png"), _file);
                 dataAdd.put("fileToUpload\"; filename=\""+generatedString+".jpg\"", _requestbody);
-
                 Log.d("Proccess", dataAdd.toString());
 
                 progressDialogUtils.showProgress();
@@ -312,7 +316,6 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
     private void initObject() {
         progressDialogUtils = new ProgressDialogUtils(getContext(), null, "Loading");
         mPresenter = new Presenter(getContext(), this);
-        progressDialogUtils.showProgress();
         mPresenter.checkIP();
     }
 
@@ -336,13 +339,10 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
         editJabatan.setText(dataUser.getJabatan());
         editCompanyName.setText(dataUser.getPenugasan());
         tvAbsen.setText(dataUser.getKeteranagan_absen());
-
-
     }
 
     @Override
     public void doSuccess(ApiResponse response, String tag) {
-        progressDialogUtils.dissmisProgress();
         if (tag.equals(RES_CHECK_IP)){
             InfoIPResponse resp = (InfoIPResponse) response;
             if (!dataUser.getIp_absen().equals(resp.ip)){
@@ -358,15 +358,19 @@ public class HomeFragment extends AppFragment implements iPresenterResponse {
                 builder.setMessage(R.string.dialog_message_success)
                         .setTitle(R.string.dialog_title);
                 AlertDialog dialog = builder.create();
-
                 dialog.show();
             }else{
-                builder.setMessage(R.string.dialog_message_failed)
-                        .setTitle(R.string.dialog_title);
+                builder.setMessage(response.message)
+                        .setTitle(R.string.dialog_message_failed);
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
+            Intent intent = new Intent(getContext(), SoundService.class);
+            intent.putExtra("jenis_absen", response.jenis_absen);
+            getContext().startService(intent);
+
         }
+        progressDialogUtils.dissmisProgress();
     }
 
     @Override

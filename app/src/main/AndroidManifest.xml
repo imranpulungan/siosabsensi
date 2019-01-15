@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.teknologi.labakaya.siosabsensiandroid">
 
@@ -12,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name=".utils.SoundService"  android:enabled="true"></service>
         <activity android:name=".activity.SplashSecreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +26,9 @@
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_goal"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.AbsenActivity"></activity>
+        <activity android:name=".activity.AbsenActivity" />
+        <activity android:name=".activity.ZoomActivity" />
+        <activity android:name=".activity.ChangePasswordActivity"></activity>
     </application>
+
 </manifest>

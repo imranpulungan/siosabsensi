@@ -2,6 +2,7 @@ package com.teknologi.labakaya.siosabsensiandroid.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teknologi.labakaya.siosabsensiandroid.R;
+import com.teknologi.labakaya.siosabsensiandroid.activity.ZoomActivity;
 import com.teknologi.labakaya.siosabsensiandroid.entity.User;
 
 import java.util.List;
@@ -57,6 +59,15 @@ public class RekapAdapter extends
                 .load( url + usersList.get(position).getFoto())
                 .placeholder(R.drawable.ic_menu_camera)
                 .into(holder.imgEmployee);
+
+        holder.imgEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ZoomActivity.class);
+                intent.putExtra("image_zoom", url + usersList.get(position).getFoto());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -28,6 +28,7 @@ public class Presenter {
     public static final String RES_GET_DATA_USER = "res_get_data_user";
     public static final String RES_GET_DATA= "res_get_data";
     public static final String RES_LOGIN = "res_process_login";
+    public static final String RES_CHANGE_PASSWORD = "res_process_change_password";
     public static final String RES_IS_LOGGED = "res_islogged";
     public static final String RES_CHECK_IP = "res_check_ip";
     public static final String RES_ABSEN_PROSES = "res_absen_proses";
@@ -219,6 +220,26 @@ public class Presenter {
             }
             @Override
             public void onFailure(Call<AbsensiResponse> call, Throwable t) {
+                Presenter.this.onFailure(t);
+            }
+        });
+    }
+
+    public void postChangePassword(Map<String, String> data) {
+        ApiClient.getInstance(context).getApi().postChangePassword(data).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                try {
+                    if (response.isSuccessful())
+                        presenterresponse.doSuccess(response.body(), RES_CHANGE_PASSWORD);
+                    else handleError(response.errorBody(), response.code());
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Presenter.this.onFailure(t);
             }
         });

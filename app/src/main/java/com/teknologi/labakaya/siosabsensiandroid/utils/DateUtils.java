@@ -56,4 +56,25 @@ public class DateUtils {
         }
         return  null;
     }
+
+    public static String getWeekDay(Date date) {
+        switch (date.getDay()) {
+            case 0:
+                return "miggu";
+            case 1:
+                return "senin";
+            case 2:
+                return "selasa";
+            case 3:
+                return "rabu";
+            case 4:
+                return "kamis";
+            case 5:
+                return "jumat";
+            case 6:
+                return "sabtu";
+            default:
+                return "miggu";
+        }
+    }
 }

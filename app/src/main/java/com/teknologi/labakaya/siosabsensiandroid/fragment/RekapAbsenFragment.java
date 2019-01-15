@@ -89,7 +89,7 @@ public class RekapAbsenFragment extends AppFragment implements iPresenterRespons
     private void initObject() {
         progressDialogUtils = new ProgressDialogUtils(getContext(), null, "Loading");
         mPresenter = new Presenter(getContext(), this);
-        data.put("niagait_post", "SELECT * FROM rekap_absensi WHERE id_pegawai="+dataUser.getAiu()+" AND rekap='False' ");
+        data.put("niagait_post", "SELECT * FROM rekap_absensi WHERE id_pegawai="+dataUser.getAiu()+" AND rekap='False' ORDER by aiu DESC");
         progressDialogUtils.showProgress();
         mPresenter.getDataAbsensi(data);
     }

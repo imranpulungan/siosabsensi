@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import com.teknologi.labakaya.siosabsensiandroid.presenter.Presenter;
 import com.teknologi.labakaya.siosabsensiandroid.presenter.iPresenterResponse;
 import com.teknologi.labakaya.siosabsensiandroid.utils.DateUtils;
 import com.teknologi.labakaya.siosabsensiandroid.utils.ProgressDialogUtils;
+import com.teknologi.labakaya.siosabsensiandroid.utils.SoundService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -346,6 +348,10 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
                 dialog = builder.create();
                 dialog.show();
             }
+
+            Intent intent = new Intent(AbsenActivity.this, SoundService.class);
+            intent.putExtra("jenis_absen", response.jenis_absen);
+            startService(intent);
 
             new Handler().postDelayed(new Runnable() {
                 @Override

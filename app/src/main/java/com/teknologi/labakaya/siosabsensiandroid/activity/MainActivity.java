@@ -1,10 +1,16 @@
 package com.teknologi.labakaya.siosabsensiandroid.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,10 +30,15 @@ import com.squareup.picasso.Picasso;
 import com.teknologi.labakaya.siosabsensiandroid.R;
 import com.teknologi.labakaya.siosabsensiandroid.entity.User;
 import com.teknologi.labakaya.siosabsensiandroid.fragment.BarcodeScannerFargment;
+import com.teknologi.labakaya.siosabsensiandroid.fragment.ChangePasswordFragment;
 import com.teknologi.labakaya.siosabsensiandroid.fragment.HomeFragment;
 import com.teknologi.labakaya.siosabsensiandroid.fragment.RekapAbsenFragment;
 import com.teknologi.labakaya.siosabsensiandroid.fragment.RekapPegawaiFragment;
 import com.teknologi.labakaya.siosabsensiandroid.utils.Session;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +46,9 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
+    private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
+    private static final String[] REQUIRED_SDK_PERMISSIONS = new String[] {
+            Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE };
     private String url = "https://sios-sil.silbusiness.com/SIOS_FILE/";
 
     private Fragment fragmentContent;
@@ -64,6 +78,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal);
+        checkPermissions();
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,6 +133,46 @@ public class MainActivity extends AppCompatActivity
             tvCompanyMenu.setText(dataUser.getAlamat());
             tvUsernameMenu.setText(dataUser.getName());
             cardLogo.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void checkPermissions() {
+        final List<String> missingPermissions = new ArrayList<String>();
+        // check all required dynamic permissions
+        for (final String permission : REQUIRED_SDK_PERMISSIONS) {
+            final int result = ContextCompat.checkSelfPermission(this, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                missingPermissions.add(permission);
+            }
+        }
+        if (!missingPermissions.isEmpty()) {
+            // request all missing permissions
+            final String[] permissions = missingPermissions
+                    .toArray(new String[missingPermissions.size()]);
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_ASK_PERMISSIONS);
+        } else {
+            final int[] grantResults = new int[REQUIRED_SDK_PERMISSIONS.length];
+            Arrays.fill(grantResults, PackageManager.PERMISSION_GRANTED);
+            onRequestPermissionsResult(REQUEST_CODE_ASK_PERMISSIONS, REQUIRED_SDK_PERMISSIONS,
+                    grantResults);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                for (int index = permissions.length - 1; index >= 0; --index) {
+                    if (grantResults[index] != PackageManager.PERMISSION_GRANTED) {
+                        // exit the app if one permission is not granted
+                        Toast.makeText(this, "Required permission '" + permissions[index]
+                                + "' not granted, exiting", Toast.LENGTH_LONG).show();
+                        finish();
+                        return;
+                    }
+                }
+                break;
         }
     }
 
@@ -233,12 +288,20 @@ public class MainActivity extends AppCompatActivity
                 tvScanText.setVisibility(View.GONE);
                 cardLogo.setVisibility(View.GONE);
                 fragmentContent = RekapPegawaiFragment.newInstance();
+            }else if(id == R.id.nav_change_password){
+                setTitle(R.string.change_password);
+                tvCompanyName.setVisibility(View.GONE);
+                imgCompany.setVisibility(View.GONE);
+                tvScanText.setVisibility(View.GONE);
+                cardLogo.setVisibility(View.GONE);
+                fragmentContent = ChangePasswordFragment.newInstance();
             }
 
 
             FragmentManager frgManager = getSupportFragmentManager();
             Bundle bundle = new Bundle();
             bundle.putSerializable("dataUser", dataUser);
+            bundle.putString("role", role);
             fragmentContent.setArguments(bundle);
             frgManager.beginTransaction().replace(R.id.content_fragment, fragmentContent).commit();
         }

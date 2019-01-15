@@ -44,6 +44,9 @@ public interface ApiInterface {
     @Multipart
     @POST("config@niagait.com/api.php?f=proses_absen")
     Call<ApiResponse> absenProses(@PartMap Map<String, RequestBody> dataAdd);
+
+    @POST("config@niagait.com/api.php?f=change_password")
+    Call<ApiResponse> postChangePassword(@Body Map<String, String> data);
 }
 
 

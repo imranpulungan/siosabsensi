@@ -12,7 +12,10 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/home" />
-
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_vpn_key_black_24dp"
+            android:title="@string/value_change" />
         <item
             android:id="@+id/nav_rekap_absen"
             android:icon="@drawable/ic_assignment_turned_in_black_24dp"

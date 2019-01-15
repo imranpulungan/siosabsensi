@@ -6,6 +6,7 @@ public class ApiResponse {
     public boolean success;
     public boolean status;
     public String message;
+    public String jenis_absen;
     public List<Error> error;
 
     public class Error{
