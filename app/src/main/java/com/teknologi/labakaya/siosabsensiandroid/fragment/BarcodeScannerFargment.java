@@ -49,7 +49,7 @@ import static com.teknologi.labakaya.siosabsensiandroid.presenter.Presenter.RES_
 public class BarcodeScannerFargment extends AppFragment implements
         ZXingScannerView.ResultHandler, iPresenterResponse {
 
-
+    String type = "MASUK";
 
     private ZXingScannerView  mScannerView;
 
@@ -75,6 +75,7 @@ public class BarcodeScannerFargment extends AppFragment implements
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             dataUser = (User) getArguments().getSerializable("dataUser");
+            type = getArguments().getString("type");
         }
     }
 
@@ -131,6 +132,7 @@ public class BarcodeScannerFargment extends AppFragment implements
             if (resp.data.size() > 0){
                 Intent intent = new Intent(getContext(), AbsenActivity.class);
                 intent.putExtra("dataUser", resp.data.get(0));
+                intent.putExtra("type", type);
                 startActivity(intent);
 //                setUserVisibleHint(true);
             }

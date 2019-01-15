@@ -22,7 +22,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
 
     User dataUser;
-    String role;
+    String role, type ="LEMBUR";
 
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_rekap_absen).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_camera).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_rekap_pegawai).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_chooice_type).setVisible(false);
             tvCompanyName.setVisibility(View.GONE);
             imgCompany.setVisibility(View.GONE);
             tvScanText.setVisibility(View.GONE);
@@ -130,10 +134,13 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_rekap_absen).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_camera).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_rekap_pegawai).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_chooice_type).setVisible(true);
             tvCompanyMenu.setText(dataUser.getAlamat());
             tvUsernameMenu.setText(dataUser.getName());
             cardLogo.setVisibility(View.VISIBLE);
         }
+
+
     }
 
     protected void checkPermissions() {
@@ -255,6 +262,73 @@ public class MainActivity extends AppCompatActivity
             AlertDialog dialog = builder.create();
             dialog.show();
             return false;
+        }else if(id == R.id.nav_chooice_type ){
+            View radioButtonView = View.inflate(this, R.layout.checkbox, null);
+            final RadioButton rbMasuk  = (RadioButton) radioButtonView.findViewById(R.id.rb_masuk);
+            final RadioButton rbPulang = (RadioButton) radioButtonView.findViewById(R.id.rb_pulang);
+            final RadioButton rbLembur = (RadioButton) radioButtonView.findViewById(R.id.rb_lembur);
+
+            rbMasuk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (rbMasuk.isChecked()){
+                        rbMasuk.setChecked(true);
+                        type = "MASUK";
+                        rbPulang.setChecked(false);
+                        rbLembur.setChecked(false);
+                    }
+                }
+            });
+
+            rbPulang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (rbPulang.isChecked()){
+                        rbPulang.setChecked(true);
+                        type = "PULANG";
+                        rbMasuk.setChecked(false);
+                        rbLembur.setChecked(false);
+                    }
+                }
+            });
+
+            rbLembur.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (rbLembur.isChecked()){
+                        rbLembur.setChecked(true);
+                        type = "LEMBUR";
+                        rbPulang.setChecked(false);
+                        rbMasuk.setChecked(false);
+                    }
+                }
+            });
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setTitle(R.string.chooice_type);
+            builder.setView(radioButtonView);
+            builder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(MainActivity.this, type, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+
+            if ( dialog!=null && dialog.isShowing()){
+                dialog.dismiss();
+            }else{
+                dialog.show();
+            }
+            return false;
         }else{
             selectMenu(id);
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -297,11 +371,11 @@ public class MainActivity extends AppCompatActivity
                 fragmentContent = ChangePasswordFragment.newInstance();
             }
 
-
             FragmentManager frgManager = getSupportFragmentManager();
             Bundle bundle = new Bundle();
             bundle.putSerializable("dataUser", dataUser);
             bundle.putString("role", role);
+            bundle.putString("type", type);
             fragmentContent.setArguments(bundle);
             frgManager.beginTransaction().replace(R.id.content_fragment, fragmentContent).commit();
         }

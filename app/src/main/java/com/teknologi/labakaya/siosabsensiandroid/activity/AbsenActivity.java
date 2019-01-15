@@ -57,6 +57,8 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
 
     private String url = "https://sios-sil.silbusiness.com/SIOS_FILE/";
 
+    String type = "MASUK";
+
     private static final int MINGGU = 1;
     private static final int SENIN  = 2;
     private static final int SELASA = 3;
@@ -147,6 +149,7 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        type = getIntent().getStringExtra("type");
         setTitle("Absensi");
         dataUser = (User) getIntent().getSerializableExtra("dataUser");
         ButterKnife.bind(this);
@@ -218,11 +221,14 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
         btnAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                startActivityForResult(cameraIntent, OPEN_CAMERA);
+//                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+//                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                } else {
+//                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                }
             }
         });
     }
@@ -295,7 +301,8 @@ public class AbsenActivity extends AppActivity implements iPresenterResponse {
                 Map<String, RequestBody> dataAdd = new HashMap<>();
                 dataAdd.put("id_pegawai", toRequestBody(dataUser.getAiu()));
                 dataAdd.put("id_penugasan", toRequestBody(dataUser.getId_penugasan()));
-                dataAdd.put("jenis_absen", toRequestBody(jenis_absen));
+//                dataAdd.put("jenis_absen", toRequestBody(jenis_absen));
+                dataAdd.put("jenis_absen", toRequestBody(type));
                 dataAdd.put("hari", toRequestBody(hari));
 
                 RequestBody _requestbody = RequestBody.create(MediaType.parse("image/png"), _file);

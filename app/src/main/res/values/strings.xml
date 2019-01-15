@@ -55,4 +55,5 @@
     <string name="edit_password_new">New Password</string>
     <string name="edit_password_new_confirm">Confirm New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="chooice_type">Pilih Jenis Absen</string>
 </resources>
